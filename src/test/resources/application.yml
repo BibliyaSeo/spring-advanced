@@ -1,0 +1,12 @@
+jwt:
+  secret:
+    key: dGVzdF9qd3Rfc2VjcmV0X2tleV9mb3JfbGVhcm5pbmdfc3BhcnRhX3NwcmluZ19ib290XzhfMjAyNQ==
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
