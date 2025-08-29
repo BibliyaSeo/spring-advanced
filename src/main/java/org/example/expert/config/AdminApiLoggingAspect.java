@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.example.expert.domain.common.dto.AuthUser;
+import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,7 +27,10 @@ public class AdminApiLoggingAspect {
 
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        AuthUser authUser = (AuthUser) request.getAttribute("authUser");
+
+        Long userId = (Long) request.getAttribute("userId");
+        String roleStr = (String) request.getAttribute("userRole");
+        UserRole userRole = roleStr != null ? UserRole.of(roleStr) : null;
 
         String requestUrl = request.getRequestURI();
         String requestTime = LocalDateTime.now().toString();
@@ -46,8 +49,8 @@ public class AdminApiLoggingAspect {
         }
 
         log.info("API 요청: userId={}, role={}, time={}, url={}, body={}",
-                authUser != null ? authUser.getId() : "anonymous",
-                authUser != null ? authUser.getUserRole() : "unknown",
+                userId != null ? userId : "anonymous",
+                userRole != null ? userRole : "unknown",
                 requestTime,
                 requestUrl,
                 requestBody);
@@ -63,8 +66,8 @@ public class AdminApiLoggingAspect {
         }
 
         log.info("API 응답: userId={}, role={}, time={}, url={}, response={}",
-                authUser != null ? authUser.getId() : "anonymous",
-                authUser != null ? authUser.getUserRole() : "unknown",
+                userId != null ? userId : "anonymous",
+                userRole != null ? userRole : "unknown",
                 LocalDateTime.now(),
                 requestUrl,
                 responseBody);
