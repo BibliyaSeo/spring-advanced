@@ -41,6 +41,11 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         String email = (String) request.getAttribute("email");
         UserRole userRole = UserRole.of((String) request.getAttribute("userRole"));
 
-        return new AuthUser(userId, email, userRole);
+        AuthUser authUser = new AuthUser(userId, email, userRole);
+
+        // Interceptor와 AOP에서 접근 가능하도록 request에 저장
+        request.setAttribute("authUser", authUser);
+
+        return authUser;
     }
 }
